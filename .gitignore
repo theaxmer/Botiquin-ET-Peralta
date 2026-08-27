@@ -1,0 +1,15 @@
+# Entornos y basura de Python
+__pycache__/
+*.pyc
+*.pyo
+venv/
+env/
+
+# Basura de Node / React
+node_modules/
+dist/
+npm-debug.log
+
+# Archivos de SO
+.DS_Store
+Thumbs.db
