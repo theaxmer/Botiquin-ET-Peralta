@@ -41,8 +41,8 @@ function App() {
 
   const cargarDatos = () => {
     Promise.all([
-      fetch('http://localhost:8000/api/articulos/', { headers: authHeadersGet }).then(res => res.json()),
-      fetch('http://localhost:8000/api/lotes/', { headers: authHeadersGet }).then(res => res.json())
+      fetch('https://botiquin-backend.onrender.com', { headers: authHeadersGet }).then(res => res.json()),
+      fetch('https://botiquin-backend.onrender.com', { headers: authHeadersGet }).then(res => res.json())
     ]).then(([articulosData, lotesData]) => {
       setArticulosBase(articulosData);
       const lotesCompletos = lotesData.map(lote => {
@@ -54,8 +54,8 @@ function App() {
     }).catch(error => console.error("Error inventario:", error));
 
     Promise.all([
-      fetch('http://localhost:8000/api/militares/', { headers: authHeadersGet }).then(res => res.json()),
-      fetch('http://localhost:8000/api/rebajes/', { headers: authHeadersGet }).then(res => res.json())
+      fetch('https://botiquin-backend.onrender.com', { headers: authHeadersGet }).then(res => res.json()),
+      fetch('https://botiquin-backend.onrender.com', { headers: authHeadersGet }).then(res => res.json())
     ]).then(([militaresData, rebajesData]) => {
       setMilitaresLista(militaresData);
       const personalCompleto = militaresData.map(militar => {
@@ -96,7 +96,7 @@ function App() {
     if (!rebajeId) return;
     if (window.confirm("¿Estás seguro de dar de alta a este militar?")) {
       try {
-        const response = await fetch(`http://localhost:8000/api/rebajes/${rebajeId}/`, {
+        const response = await fetch(`https://botiquin-backend.onrender.com${rebajeId}/`, {
           method: 'PATCH',
           headers: authHeaders,
           body: JSON.stringify({ activo: false })
@@ -150,7 +150,7 @@ function App() {
     };
 
     try {
-      const resRebaje = await fetch('http://localhost:8000/api/rebajes/', {
+      const resRebaje = await fetch('https://botiquin-backend.onrender.com', {
         method: 'POST',
         headers: authHeaders,
         body: JSON.stringify(datosPeticion)
@@ -161,7 +161,7 @@ function App() {
       if (loteConsumir) {
         const loteActual = inventario.find(l => l.id === parseInt(loteConsumir));
         if (loteActual && loteActual.cantidad > 0) {
-          await fetch(`http://localhost:8000/api/lotes/${loteConsumir}/`, {
+          await fetch(`https://botiquin-backend.onrender.com${loteConsumir}/`, {
             method: 'PATCH',
             headers: authHeaders,
             body: JSON.stringify({ cantidad: loteActual.cantidad - 1 })
@@ -187,7 +187,7 @@ function App() {
     if (!loteId) return;
     if (window.confirm("¿Estás seguro de eliminar este lote de material del inventario?")) {
       try {
-        const response = await fetch(`http://localhost:8000/api/lotes/${loteId}/`, { 
+        const response = await fetch(`https://botiquin-backend.onrender.com${loteId}/`, { 
           method: 'DELETE',
           headers: authHeadersGet 
         });
@@ -206,7 +206,7 @@ function App() {
   const modificarCantidad = (lote, cambio) => {
     const nuevaCantidad = lote.cantidad + cambio;
     if (nuevaCantidad < 0) return alert("⚠️ Cantidad no puede ser menor a 0.");
-    fetch(`http://localhost:8000/api/lotes/${lote.id}/`, {
+    fetch(`https://botiquin-backend.onrender.com${lote.id}/`, {
       method: 'PATCH',
       headers: authHeaders,
       body: JSON.stringify({ cantidad: nuevaCantidad }),
@@ -226,7 +226,7 @@ function App() {
     };
 
     try {
-      const res = await fetch('http://localhost:8000/api/lotes/', {
+      const res = await fetch('https://botiquin-backend.onrender.com', {
         method: 'POST',
         headers: authHeaders,
         body: JSON.stringify(datosLote)
