@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-=-!ylamw*atoh)oetaivd8dpwyphu(_1=15)*%dkls!fu^cueu
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_TRUSTED_ORIGINS = ['https://botiquin-backend.onrender.com']
 
 
 # Application definition
