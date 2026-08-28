@@ -1,9 +1,7 @@
 from django.db import models
 
 
-# --- MODULO DE PERSONAL (Simulacion de la BD del ET) ---
 class Militar(models.Model):
-    # Definimos las 6 compañías tácticas disponibles
     OPCIONES_COMPANIA = [
         ('1ºCIA', '1ª Compañía'),
         ('2ºCIA', '2ª Compañía'),
@@ -62,7 +60,6 @@ class RebajeMedico(models.Model):
         return f"{self.militar.nombre} - {tipo} [{estado}]"
 
 
-# --- MODULO DE INVENTARIO SANITARIO ---
 class ArticuloSanitario(models.Model):
     codigo_barras = models.CharField(max_length=100, unique=True)
     nombre = models.CharField(max_length=150)
