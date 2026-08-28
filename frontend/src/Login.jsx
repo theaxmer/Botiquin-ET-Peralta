@@ -9,7 +9,7 @@ function Login({ onLogin }) {
     e.preventDefault();
     try {
       // Hacemos la petición a la ruta que acabamos de crear en Django
-      const response = await fetch('[https://botiquin-backend.onrender.com', {
+      const response = await fetch('https://botiquin-backend.onrender.com/api/login/', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
