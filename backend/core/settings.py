@@ -1,3 +1,5 @@
+import os
+import dj_database_url
 """
 Django settings for core project.
 
@@ -77,15 +79,13 @@ WSGI_APPLICATION = 'core.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
+# MANTÉN ESTE BLOQUE EXACTAMENTE:
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'botiquin_et',
-        'USER': 'admin',
-        'PASSWORD': 'password_seguro',
-        'HOST': 'db',
-        'PORT': '5432',
-    }
+    'default': dj_database_url.config(
+        default='sqlite:///' + str(BASE_DIR / 'db.sqlite3'),
+        conn_max_age=600,
+        conn_health_checks=True,
+    )
 }
 
 
