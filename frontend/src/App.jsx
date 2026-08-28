@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react';
 import Login from './Login';
 
 function App() {
-  // 1️⃣ DECLARAMOS TODO EL "ARSENAL" DE ESTADOS ARRIBA DEL TODO (REGLA DE REACT)
   const [token, setToken] = useState(localStorage.getItem('token'));
   const [pestañaActiva, setPestañaActiva] = useState('sanidad'); 
   const [inventario, setInventario] = useState([]);
@@ -23,7 +22,6 @@ function App() {
   const [cantidadEntrante, setCantidadEntrante] = useState(1);
   const [fechaCaducidadEntrante, setFechaCaducidadEntrante] = useState('');
 
-  // 2️⃣ CABECERAS DE SEGURIDAD PARA DJANGO
   const authHeaders = {
     'Content-Type': 'application/json',
     'Authorization': `Token ${token}`
@@ -33,16 +31,16 @@ function App() {
     'Authorization': `Token ${token}`
   };
 
-  // 3️⃣ FUNCIONES TÁCTICAS
   const handleLogout = () => {
     localStorage.removeItem('token');
     setToken(null);
   };
 
+  // 🔥 AQUÍ ESTABA EL ERROR PRINCIPAL: Faltaban las rutas exactas (/api/articulos/, etc.)
   const cargarDatos = () => {
     Promise.all([
-      fetch('https://botiquin-backend.onrender.com', { headers: authHeadersGet }).then(res => res.json()),
-      fetch('https://botiquin-backend.onrender.com', { headers: authHeadersGet }).then(res => res.json())
+      fetch('https://botiquin-backend.onrender.com/api/articulos/', { headers: authHeadersGet }).then(res => res.json()),
+      fetch('https://botiquin-backend.onrender.com/api/lotes/', { headers: authHeadersGet }).then(res => res.json())
     ]).then(([articulosData, lotesData]) => {
       setArticulosBase(articulosData);
       const lotesCompletos = lotesData.map(lote => {
@@ -54,8 +52,8 @@ function App() {
     }).catch(error => console.error("Error inventario:", error));
 
     Promise.all([
-      fetch('https://botiquin-backend.onrender.com', { headers: authHeadersGet }).then(res => res.json()),
-      fetch('https://botiquin-backend.onrender.com', { headers: authHeadersGet }).then(res => res.json())
+      fetch('https://botiquin-backend.onrender.com/api/militares/', { headers: authHeadersGet }).then(res => res.json()),
+      fetch('https://botiquin-backend.onrender.com/api/rebajes/', { headers: authHeadersGet }).then(res => res.json())
     ]).then(([militaresData, rebajesData]) => {
       setMilitaresLista(militaresData);
       const personalCompleto = militaresData.map(militar => {
@@ -92,11 +90,12 @@ function App() {
     }
   }, [token]);
 
+  // 🔥 RUTA CORREGIDA: /api/rebajes/${rebajeId}/
   const eliminarRebaje = async (rebajeId) => {
     if (!rebajeId) return;
     if (window.confirm("¿Estás seguro de dar de alta a este militar?")) {
       try {
-        const response = await fetch(`https://botiquin-backend.onrender.com${rebajeId}/`, {
+        const response = await fetch(`https://botiquin-backend.onrender.com/api/rebajes/${rebajeId}/`, {
           method: 'PATCH',
           headers: authHeaders,
           body: JSON.stringify({ activo: false })
@@ -150,7 +149,8 @@ function App() {
     };
 
     try {
-      const resRebaje = await fetch('https://botiquin-backend.onrender.com', {
+      // 🔥 RUTA CORREGIDA: /api/rebajes/
+      const resRebaje = await fetch('https://botiquin-backend.onrender.com/api/rebajes/', {
         method: 'POST',
         headers: authHeaders,
         body: JSON.stringify(datosPeticion)
@@ -161,7 +161,8 @@ function App() {
       if (loteConsumir) {
         const loteActual = inventario.find(l => l.id === parseInt(loteConsumir));
         if (loteActual && loteActual.cantidad > 0) {
-          await fetch(`https://botiquin-backend.onrender.com${loteConsumir}/`, {
+          // 🔥 RUTA CORREGIDA: /api/lotes/${loteConsumir}/
+          await fetch(`https://botiquin-backend.onrender.com/api/lotes/${loteConsumir}/`, {
             method: 'PATCH',
             headers: authHeaders,
             body: JSON.stringify({ cantidad: loteActual.cantidad - 1 })
@@ -183,11 +184,12 @@ function App() {
     }
   };
 
+  // 🔥 RUTA CORREGIDA: /api/lotes/${loteId}/
   const eliminarLote = async (loteId) => {
     if (!loteId) return;
     if (window.confirm("¿Estás seguro de eliminar este lote de material del inventario?")) {
       try {
-        const response = await fetch(`https://botiquin-backend.onrender.com${loteId}/`, { 
+        const response = await fetch(`https://botiquin-backend.onrender.com/api/lotes/${loteId}/`, { 
           method: 'DELETE',
           headers: authHeadersGet 
         });
@@ -203,10 +205,11 @@ function App() {
     }
   };
 
+  // 🔥 RUTA CORREGIDA: /api/lotes/${lote.id}/
   const modificarCantidad = (lote, cambio) => {
     const nuevaCantidad = lote.cantidad + cambio;
     if (nuevaCantidad < 0) return alert("⚠️ Cantidad no puede ser menor a 0.");
-    fetch(`https://botiquin-backend.onrender.com${lote.id}/`, {
+    fetch(`https://botiquin-backend.onrender.com/api/lotes/${lote.id}/`, {
       method: 'PATCH',
       headers: authHeaders,
       body: JSON.stringify({ cantidad: nuevaCantidad }),
@@ -226,7 +229,8 @@ function App() {
     };
 
     try {
-      const res = await fetch('https://botiquin-backend.onrender.com', {
+      // 🔥 RUTA CORREGIDA: /api/lotes/
+      const res = await fetch('https://botiquin-backend.onrender.com/api/lotes/', {
         method: 'POST',
         headers: authHeaders,
         body: JSON.stringify(datosLote)
@@ -255,12 +259,10 @@ function App() {
     else return { texto: 'Operativo', estilo: 'bg-green-100 text-green-800 border-green-300' };
   };
 
-  // 4️⃣ BARRERA DE SEGURIDAD (AHORA SÍ, JUSTO ANTES DE PINTAR LA APP)
   if (!token) {
     return <Login onLogin={setToken} />;
   }
 
-  // 5️⃣ DESPLIEGUE DE LA INTERFAZ PRINCIPAL
   const pacientesRebajados = pacientes.filter(p => p.estado === 'REBAJADO');
 
   return (
@@ -396,7 +398,7 @@ function App() {
         )}
       </main>
 
-      {/* MODAL 1: REGISTRO DE ASISTENCIA MÉDICA */}
+      {/* MODALES DEJAN IGUAL */}
       {mostrarModal && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-2xl border border-slate-300 w-full max-w-lg overflow-hidden">
@@ -469,7 +471,6 @@ function App() {
         </div>
       )}
 
-      {/* MODAL 2: AÑADIR NUEVO STOCK AL ALMACÉN */}
       {mostrarModalStock && (
         <div className="fixed inset-0 bg-slate-900/60 backdrop-blur-sm flex justify-center items-center p-4 z-50">
           <div className="bg-white rounded-lg shadow-2xl border border-slate-300 w-full max-w-lg overflow-hidden">
