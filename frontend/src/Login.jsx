@@ -22,7 +22,7 @@ function Login({ onLogin }) {
         localStorage.setItem('token', data.token);
         onLogin(data.token); // Avisamos a la aplicación de que ya podemos entrar
       } else {
-        setError('redenciales incorrectas. Acceso denegado.');
+        setError('Credenciales incorrectas. Acceso denegado.');
       }
     } catch (err) {
       setError('Error de conexión con el servidor');
