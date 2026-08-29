@@ -31,7 +31,7 @@ function Login({ onLogin }) {
 
   return (
     <div style={{ maxWidth: '400px', margin: '100px auto', textAlign: 'center', fontFamily: 'sans-serif' }}>
-      <h2>🛡️ Acceso Restringido</h2>
+      <h2>Acceso Restringido</h2>
       <h3>Botiquín ET</h3>
       <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '15px', marginTop: '20px' }}>
         <input 
