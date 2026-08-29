@@ -3,6 +3,12 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Militar, RebajeMedico, ArticuloSanitario, Lote
 from .serializers import MilitarSerializer, RebajeMedicoSerializer, ArticuloSanitarioSerializer, LoteSerializer
+from .permissions import EsAdminOSoloLectura
+from rest_framework.permissions import IsAuthenticated
+
+class TuViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsAuthenticated, EsAdminOSoloLectura]
+    # ... el resto de tu código igual
 
 class MilitarViewSet(viewsets.ModelViewSet):
     queryset = Militar.objects.all()
