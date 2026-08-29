@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'rest_framework',
     'inventario',
     'rest_framework.authtoken',
-    'django_extensions',
 ]
 
 MIDDLEWARE = [
