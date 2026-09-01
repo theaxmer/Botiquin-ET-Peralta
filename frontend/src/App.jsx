@@ -36,7 +36,6 @@ function App() {
     setToken(null);
   };
 
-  // 🔥 AQUÍ ESTABA EL ERROR PRINCIPAL: Faltaban las rutas exactas (/api/articulos/, etc.)
   const cargarDatos = () => {
     Promise.all([
       fetch('https://botiquin-backend.onrender.com/api/articulos/', { headers: authHeadersGet }).then(res => res.json()),
@@ -90,7 +89,6 @@ function App() {
     }
   }, [token]);
 
-  // 🔥 RUTA CORREGIDA: /api/rebajes/${rebajeId}/
   const eliminarRebaje = async (rebajeId) => {
     if (!rebajeId) return;
     if (window.confirm("¿Estás seguro de dar de alta a este militar?")) {
@@ -149,7 +147,6 @@ function App() {
     };
 
     try {
-      // 🔥 RUTA CORREGIDA: /api/rebajes/
       const resRebaje = await fetch('https://botiquin-backend.onrender.com/api/rebajes/', {
         method: 'POST',
         headers: authHeaders,
@@ -161,7 +158,6 @@ function App() {
       if (loteConsumir) {
         const loteActual = inventario.find(l => l.id === parseInt(loteConsumir));
         if (loteActual && loteActual.cantidad > 0) {
-          // 🔥 RUTA CORREGIDA: /api/lotes/${loteConsumir}/
           await fetch(`https://botiquin-backend.onrender.com/api/lotes/${loteConsumir}/`, {
             method: 'PATCH',
             headers: authHeaders,
@@ -184,7 +180,6 @@ function App() {
     }
   };
 
-  // 🔥 RUTA CORREGIDA: /api/lotes/${loteId}/
   const eliminarLote = async (loteId) => {
     if (!loteId) return;
     if (window.confirm("¿Estás seguro de eliminar este lote de material del inventario?")) {
@@ -205,7 +200,6 @@ function App() {
     }
   };
 
-  // 🔥 RUTA CORREGIDA: /api/lotes/${lote.id}/
   const modificarCantidad = (lote, cambio) => {
     const nuevaCantidad = lote.cantidad + cambio;
     if (nuevaCantidad < 0) return alert("⚠️ Cantidad no puede ser menor a 0.");
@@ -229,7 +223,6 @@ function App() {
     };
 
     try {
-      // 🔥 RUTA CORREGIDA: /api/lotes/
       const res = await fetch('https://botiquin-backend.onrender.com/api/lotes/', {
         method: 'POST',
         headers: authHeaders,
@@ -271,7 +264,7 @@ function App() {
         <div className="container mx-auto px-4 py-4 flex justify-between items-center">
           <h1 className="text-2xl font-bold tracking-wider">✚ BOTIQUÍN DIGITAL ET</h1>
           <button onClick={handleLogout} className="bg-red-700 hover:bg-red-800 text-white px-3 py-1.5 rounded text-xs font-bold transition flex items-center gap-1 shadow">
-            <span>🚪</span> Cerrar Sesión
+            Cerrar Sesión
           </button>
         </div>
         <div className="container mx-auto px-4 flex gap-4 mt-2">
